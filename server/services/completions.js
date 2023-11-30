@@ -4,6 +4,7 @@ const fetch = require('node-fetch');
 
 module.exports = ({ strapi }) => {
   const createCompletion = async ({ model, prompt, temperature, maxTokens }) => {
+    let messages = [{role: 'user', content: prompt}];
     try {
       const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
         method: 'POST',
@@ -13,7 +14,7 @@ module.exports = ({ strapi }) => {
             .plugin('open-ai')
             .config('API_TOKEN')}`,
         },
-        body: JSON.stringify({ model, prompt, temperature, max_tokens: maxTokens }),
+        body: JSON.stringify({ model, messages, temperature, max_tokens: maxTokens }),
       });
 
       const res = await response.json();
